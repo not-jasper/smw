@@ -12,8 +12,9 @@
     body {
       margin: 0;
       background-color: #5cadff;
-      font-family: 'MarioWorld', sans-serif;
+      font-family: 'MarioWorld', monospace;
       font-size: 16px;
+      font-weight: normal;
       line-height: 16px;
       image-rendering: pixelated;
       cursor: url("cursorm.png") 0 0, auto;
@@ -24,18 +25,19 @@
       color: white;
       text-align: center;
       margin-top: 200px;
-      font-size: 24px;
-      text-shadow: 2px 2px #000;
+      font-size: 16px;
+      font-weight: normal;
+      text-shadow: 2px 2px 0 #000;
       image-rendering: pixelated;
     }
 
     .big-clouds {
       position: fixed;
-      top: 64px;
+      bottom: 0;
       left: 0;
       right: 0;
       height: 128px;
-      background: url('big-cloud.png') repeat-x;
+      background: url('big-cloud.png') repeat-x bottom;
       image-rendering: pixelated;
       z-index: -2;
     }
@@ -73,7 +75,7 @@
       document.body.appendChild(cloud)
 
       let x = -100
-      const speed = Math.random() * 0.5 + 0.2
+      const speed = Math.floor(Math.random() * 2 + 1) // 1 or 2 px per frame
       activeClouds++
 
       function animate() {
