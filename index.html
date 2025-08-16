@@ -11,118 +11,85 @@
 
     body {
       margin: 0;
-      overflow-x: hidden;
-      background-color: #87ceeb; /* fallback until JS sets dominant color */
+      background-color: #5cadff;
       font-family: 'MarioWorld', sans-serif;
-      cursor: url('cursorm.png') 0 0, auto;
+      font-size: 16px;
+      line-height: 16px;
+      image-rendering: pixelated;
+      cursor: url("cursorm.png") 0 0, auto;
+      overflow-x: hidden;
     }
 
-    /* Big cloud horizon */
-    .big-clouds {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 200px; /* adjust to sprite height */
-      background: url('big-cloud.png') repeat-x;
-      background-size: auto 100%;
-      z-index: -2;
-    }
-
-    /* Sky layer */
-    .sky {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: -3;
+    h1 {
+      color: white;
+      text-align: center;
+      margin-top: 200px;
+      font-size: 24px;
+      text-shadow: 2px 2px #000;
       image-rendering: pixelated;
     }
 
-    /* Small clouds */
+    .big-clouds {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      height: 128px;
+      background: url('big-cloud.png') repeat-x;
+      image-rendering: pixelated;
+      z-index: -2;
+    }
+
     .cloud {
       position: absolute;
-      top: 50px;
-      width: 48px; /* adjust to your sprite */
-      height: 32px;
+      width: 32px;
+      height: 24px;
       background: url('small-cloud.png') no-repeat;
       background-size: contain;
       image-rendering: pixelated;
       pointer-events: none;
     }
 
-    h1 {
-      color: white;
-      text-align: center;
-      margin-top: 250px;
-      font-size: 48px;
-      text-shadow: 2px 2px #000;
+    .spacer {
+      height: 3000px;
     }
   </style>
 </head>
 <body>
-  <div class="sky"></div>
   <div class="big-clouds"></div>
-
   <h1>Welcome to My Mario World!</h1>
+  <div class="spacer"></div>
 
   <script>
-    // --- Detect dominant color of big-cloud.png and set as background ---
-    const img = new Image();
-    img.src = 'big-cloud.png';
-    img.crossOrigin = 'Anonymous';
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+    let activeClouds = 0
+    const maxClouds = 5
 
-      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-      let r=0, g=0, b=0, count=0;
-
-      for (let i = 0; i < data.length; i += 4) {
-        // Ignore transparent pixels
-        if (data[i+3] > 128) {
-          r += data[i];
-          g += data[i+1];
-          b += data[i+2];
-          count++;
-        }
-      }
-      if (count > 0) {
-        r = Math.round(r / count);
-        g = Math.round(g / count);
-        b = Math.round(b / count);
-        document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
-      }
-    };
-
-    // --- Spawn drifting small clouds ---
     function spawnCloud() {
-      const cloud = document.createElement('div');
-      cloud.className = 'cloud';
-      cloud.style.top = `${Math.floor(Math.random() * 200 + 50)}px`; // random height
-      document.body.appendChild(cloud);
+      if (activeClouds >= maxClouds) return
 
-      let x = -100;
-      const speed = Math.random() * 0.5 + 0.2; // pixels per frame
+      const cloud = document.createElement('div')
+      cloud.className = 'cloud'
+      cloud.style.top = `${Math.floor(Math.random() * 200 + 50)}px`
+      document.body.appendChild(cloud)
+
+      let x = -100
+      const speed = Math.random() * 0.5 + 0.2
+      activeClouds++
 
       function animate() {
-        x += speed;
-        cloud.style.transform = `translateX(${Math.round(x)}px)`;
+        x += speed
+        cloud.style.transform = `translateX(${Math.round(x)}px)`
         if (x < window.innerWidth + 100) {
-          requestAnimationFrame(animate);
+          requestAnimationFrame(animate)
         } else {
-          cloud.remove();
+          cloud.remove()
+          activeClouds--
         }
       }
-      animate();
+      animate()
     }
 
-    // Spawn clouds at intervals
-    setInterval(spawnCloud, 3000);
+    setInterval(spawnCloud, 4000)
   </script>
 </body>
 </html>
