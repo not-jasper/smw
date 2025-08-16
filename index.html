@@ -12,13 +12,13 @@
     html, body {
       margin: 0;
       height: 100%;
-      background-color: #7ccfff; /* lighter sky */
+      background-color: #9ad9ff; /* lighter sky */
       font-family: 'MarioWorld', monospace;
       font-size: 16px;
       font-weight: normal;
       line-height: 16px;
       image-rendering: pixelated;
-      cursor: url("cursorm.png") 0 0, default !important;
+      cursor: url("cursorm.png") 0 0, auto;
       overflow-x: hidden;
     }
 
@@ -33,12 +33,12 @@
     }
 
     .big-clouds {
-      position: absolute;
+      position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
       height: 128px;
-      background: url('big-cloud.png') repeat-x;
+      background: url('big-cloud.png') repeat-x bottom;
       image-rendering: pixelated;
       z-index: -2;
     }
@@ -76,12 +76,12 @@
       document.body.appendChild(cloud)
 
       let x = -100
-      const speed = 0.5 // slower movement, pixel by pixel
+      const speed = 0.25 // slower movement
       activeClouds++
 
       function animate() {
         x += speed
-        cloud.style.transform = `translateX(${Math.round(x)}px)`
+        cloud.style.transform = `translate(${Math.round(x)}px, ${-window.scrollY}px)`
         if (x < window.innerWidth + 100) {
           requestAnimationFrame(animate)
         } else {
@@ -92,13 +92,7 @@
       animate()
     }
 
-    setInterval(spawnCloud, 5000)
-
-    // Scroll background with page
-    window.addEventListener('scroll', () => {
-      const offset = window.scrollY
-      document.querySelector('.big-clouds').style.transform = `translateY(${-offset}px)`
-    })
+    setInterval(spawnCloud, 6000)
   </script>
 </body>
 </html>
